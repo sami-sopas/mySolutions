@@ -15,52 +15,47 @@ using System;
 class Result
 {
     /*
-     * Complete the 'getTotalX' function below.
+     * Complete the 'birthday' function below.
      *
      * The function is expected to return an INTEGER.
      * The function accepts following parameters:
-     *  1. INTEGER_ARRAY a
-     *  2. INTEGER_ARRAY b
+     *  1. INTEGER_ARRAY s
+     *  2. INTEGER d
+     *  3. INTEGER m
      */
 
-    public static void getTotalX(List<int> a, List<int> b)
+    public static void birthday(List<int> s, int d, int m)
     {
-        int start = a.Max();
-        int end = b.Min();
         int count = 0;
 
-        while (start <= end)
+        //Fill first window of size m and sum their numbers
+        int sum = 0;
+        for (int i = 0; i < m; i++)
         {
-            int countA = 0;
-            int countB = 0;
+            sum += s[i];
+        }
 
-            a.ForEach(a =>
-            {
-                if (start % a == 0)
-                {
-                    countA++;
-                }
-            });
+        //See if the first window combination covers the requirement
+        if (sum == d)
+        {
+            count++;
+        }
 
-            b.ForEach(b =>
-            {
-                if (b % start == 0)
-                {
-                    countB++;
-                }
-            });
+        //Slinding windows!!
+        for (int i = m; i < s.Count(); i++)
+        {
+            sum = sum - s[i - m]; // Remove element leaving window
+            sum = sum + s[i];     // Add element entering window
 
-            if (a.Count() == countA && b.Count() == countB)
+            if (sum == d)
             {
                 count++;
             }
-
-            start++;
         }
 
         Console.WriteLine(count);
-    }
 
+    }
 }
 
 class Solution
@@ -71,20 +66,21 @@ class Solution
         //TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
 
         //string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
-        string[] firstMultipleInput = File.ReadAllText("input.txt").TrimEnd().Split(' '); // Read fromfile
+        //string[] firstMultipleInput = File.ReadAllText("input.txt").TrimEnd().Split(' '); // Read fromfile
 
-        int n = Convert.ToInt32(firstMultipleInput[0]);
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> s = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(sTemp => Convert.ToInt32(sTemp)).ToList();
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int d = Convert.ToInt32(firstMultipleInput[0]);
 
         int m = Convert.ToInt32(firstMultipleInput[1]);
 
-        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+        Result.birthday(s, d, m);
 
-        List<int> brr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(brrTemp => Convert.ToInt32(brrTemp)).ToList();
-
-        //int total = Result.getTotalX(arr, brr);
-        Result.getTotalX(arr, brr);
-
-        // textWriter.WriteLine(total);
+        // textWriter.WriteLine(result);
 
         // textWriter.Flush();
         // textWriter.Close();
